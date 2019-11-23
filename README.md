@@ -1,5 +1,5 @@
 
-我是如何学习WebGL的。
+我是如何学习WebGL的。  
 本项目的仓库是[LearnWebgl](https://github.com/jihuayu/LearnWebgl)，欢迎star。
 
 ## 目录
