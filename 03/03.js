@@ -29,9 +29,11 @@ gl.useProgram(program);
 
 //复制顶点数组到缓冲中供WebGL使用
 var vertices = new Float32Array([
-    -0.5, 0.5, 0, 1,
-    0.5, 0.5, 0, 1,
-    -0.5, -0.5, 0, 1,
+    -0.1, 0.1, 0, 1,
+    0.1, 0.1, 0, 1,
+    -0.1, -0.1, 0, 1,
+    0.1, -0.1, 0, 1,
+    0.1, -0.3, 0, 1,
 ]);
 var buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -48,3 +50,4 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 
 //画对象
 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
+gl.drawArrays(gl.TRIANGLE_STRIP, 2, 3);

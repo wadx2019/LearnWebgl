@@ -121,7 +121,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 module.exports = "#define GLSLIFY 1\nattribute vec4 a_Position;\n\nvoid main() {\n    gl_Position = a_Position;\n}\n";
 },{}],"../res/01.frag":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\nvoid main() {\n    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n}\n";
-},{}],"01.js":[function(require,module,exports) {
+},{}],"02.js":[function(require,module,exports) {
 "use strict";
 
 var _ = _interopRequireDefault(require("../res/01.vert"));
@@ -149,7 +149,7 @@ gl.attachShader(program, fragmentShader); //链接程序对象和WebGl
 gl.linkProgram(program);
 gl.useProgram(program); //复制顶点数组到缓冲中供WebGL使用
 
-var vertices = new Float32Array([-0.11, 0.11, 0, 1, 0.11, 0.11, 0, 1, -0.11, -0.11, 0, 1]);
+var vertices = new Float32Array([-0.1, 0.1, 0, 1, 0.1, 0.1, 0, 1, -0.1, -0.1, 0, 1, 0.1, -0.1, 0, 1, 0.1, -0.3, 0, 1]);
 var buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW); //设置顶点属性指针
@@ -162,6 +162,7 @@ gl.clearColor(1.0, 1.0, 1.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT); //画对象
 
 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
+gl.drawArrays(gl.TRIANGLE_STRIP, 2, 3);
 },{"../res/01.vert":"../res/01.vert","../res/01.frag":"../res/01.frag"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -190,7 +191,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "42705" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34473" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -366,5 +367,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","01.js"], null)
+},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","02.js"], null)
 //# sourceMappingURL=/03.js.map
