@@ -121,53 +121,128 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 module.exports = "#define GLSLIFY 1\nattribute vec4 a_Position;\n\nvoid main() {\n    gl_Position = a_Position;\n}\n";
 },{}],"../res/01.frag":[function(require,module,exports) {
 module.exports = "#define GLSLIFY 1\nvoid main() {\n    gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n}\n";
-},{}],"03.js":[function(require,module,exports) {
+},{}],"../res/webgl.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var Webgl =
+/** @class */
+function () {
+  function Webgl(id) {
+    var canvas = document.getElementById('canvas');
+    this.gl = canvas.getContext('experimental-webgl');
+    this.program = this.gl.createProgram();
+  }
+
+  Webgl.prototype.get_gl = function () {
+    return this.gl;
+  };
+
+  Webgl.prototype.get_program = function () {
+    return this.gl;
+  };
+
+  Webgl.prototype.bind_shader = function (vertex, fragment) {
+    //编译顶点着色器
+    var vertexShader = this.gl.createShader(this.gl.VERTEX_SHADER);
+    this.gl.shaderSource(vertexShader, vertex);
+    this.gl.compileShader(vertexShader); //编译片元着色器
+
+    var fragmentShader = this.gl.createShader(this.gl.FRAGMENT_SHADER);
+    this.gl.shaderSource(fragmentShader, fragment);
+    this.gl.compileShader(fragmentShader); //创建程序对象
+    //将着色器附加到程序对象
+
+    this.gl.attachShader(this.program, vertexShader);
+    this.gl.attachShader(this.program, fragmentShader);
+    console.log(this.gl.getShaderInfoLog(vertexShader));
+    console.log(this.gl.getShaderInfoLog(fragmentShader)); //链接程序对象和WebGl
+
+    this.gl.linkProgram(this.program);
+    this.gl.useProgram(this.program);
+  };
+
+  Webgl.prototype.bind_buffer = function (arr, target) {
+    var buffer = this.gl.createBuffer();
+    this.gl.bindBuffer(target, buffer);
+    this.gl.bufferData(target, arr, this.gl.STATIC_DRAW);
+  };
+
+  Webgl.prototype.bind_array_buffer = function (arr) {
+    this.bind_buffer(arr, this.gl.ARRAY_BUFFER);
+  };
+
+  Webgl.prototype.bind_element_array_buffer = function (arr) {
+    this.bind_buffer(arr, this.gl.ELEMENT_ARRAY_BUFFER);
+  };
+
+  Webgl.prototype.set_attr = function (name, size, stride, offset) {
+    if (stride === void 0) {
+      stride = 0;
+    }
+
+    if (offset === void 0) {
+      offset = 0;
+    }
+
+    var a_Position = this.gl.getAttribLocation(this.program, name);
+    this.gl.vertexAttribPointer(a_Position, size, this.gl.FLOAT, false, stride, offset);
+    this.gl.enableVertexAttribArray(a_Position);
+  };
+
+  Webgl.prototype.set_clear_color = function (red, green, blue, alpha) {
+    if (alpha === void 0) {
+      alpha = 1.0;
+    }
+
+    this.gl.clearColor(red, green, blue, alpha);
+  };
+
+  Webgl.prototype.clear = function () {
+    this.get_gl().clear(this.gl.COLOR_BUFFER_BIT);
+  };
+
+  Webgl.prototype.draw_element_triangles = function (size, offset) {
+    if (offset === void 0) {
+      offset = 0;
+    }
+
+    this.gl.drawElements(this.gl.TRIANGLES, size, this.gl.UNSIGNED_SHORT, offset);
+  };
+
+  return Webgl;
+}();
+
+exports.default = Webgl;
+},{}],"sp1.js":[function(require,module,exports) {
 "use strict";
 
 var _ = _interopRequireDefault(require("../res/01.vert"));
 
 var _2 = _interopRequireDefault(require("../res/01.frag"));
 
+var _webgl = _interopRequireDefault(require("../res/webgl"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var canvas = document.getElementById('canvas');
-var gl = canvas.getContext('experimental-webgl'); //编译顶点着色器
-
-var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-gl.shaderSource(vertexShader, _.default);
-gl.compileShader(vertexShader); //编译片元着色器
-
-var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-gl.shaderSource(fragmentShader, _2.default);
-gl.compileShader(fragmentShader); //创建程序对象
-
-var program = gl.createProgram(); //将着色器附加到程序对象
-
-gl.attachShader(program, vertexShader);
-gl.attachShader(program, fragmentShader); //链接程序对象和WebGl
-
-gl.linkProgram(program);
-gl.useProgram(program); //复制顶点数组到缓冲中供WebGL使用
+var gl = new _webgl.default('canvas');
+gl.bind_shader(_.default, _2.default); //复制顶点数组到缓冲中供WebGL使用
 
 var vertices = new Float32Array([-0.1, 0.1, 0, 1, 0.1, 0.1, 0, 1, 0.1, -0.1, 0, 1, -0.1, -0.1, 0, 1, 0.1, -0.3, 0, 1, 0.3, -0.3, 0, 1]);
-var buffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW); //设置绘制顶点的顺序
+gl.bind_array_buffer(vertices); //设置绘制顶点的顺序
 
 var indices = new Uint16Array([0, 1, 3, 1, 5, 4]);
-buffer = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW); //设置顶点属性指针
+gl.bind_element_array_buffer(indices); //设置顶点属性指针
 
-var a_Position = gl.getAttribLocation(program, 'a_Position');
-gl.vertexAttribPointer(a_Position, 4, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(a_Position); //清屏幕
+gl.set_attr('a_Position', 4); //清屏幕
 
-gl.clearColor(1.0, 1.0, 1.0, 1.0);
-gl.clear(gl.COLOR_BUFFER_BIT); //画对象
+gl.clear(); //画对象
 
-gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
-},{"../res/01.vert":"../res/01.vert","../res/01.frag":"../res/01.frag"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+gl.draw_element_triangles(6);
+},{"../res/01.vert":"../res/01.vert","../res/01.frag":"../res/01.frag","../res/webgl":"../res/webgl.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -195,7 +270,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35337" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43665" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -371,5 +446,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","03.js"], null)
-//# sourceMappingURL=/03.js.map
+},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","sp1.js"], null)
+//# sourceMappingURL=/sp1.js.map

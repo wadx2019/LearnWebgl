@@ -31,13 +31,23 @@ gl.useProgram(program);
 var vertices = new Float32Array([
     -0.1, 0.1, 0, 1,
     0.1, 0.1, 0, 1,
-    -0.1, -0.1, 0, 1,
     0.1, -0.1, 0, 1,
+    -0.1, -0.1, 0, 1,
     0.1, -0.3, 0, 1,
+    0.3, -0.3, 0, 1,
 ]);
 var buffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+//设置绘制顶点的顺序
+var indices = new Uint16Array([
+    0,1,3,
+    1,5,4
+]);
+buffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
 //设置顶点属性指针
 var a_Position = gl.getAttribLocation(program, 'a_Position');
@@ -49,5 +59,4 @@ gl.clearColor(1.0, 1.0, 1.0, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
 //画对象
-gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
-gl.drawArrays(gl.TRIANGLE_STRIP, 2, 3);
+gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT,0);

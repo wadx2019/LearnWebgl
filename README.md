@@ -1,7 +1,7 @@
-# LearnWebgl
+# LearnWebGL
 
-我是如何学习WebGl的。
-
+我是如何学习WebGL的。
+本项目的仓库是[LearnWebgl](https://github.com/jihuayu/LearnWebgl)，欢迎star。
 ## 目录
 
 ### 第0部分：开始旅途
@@ -12,3 +12,6 @@
 - [来两个三角形](02/来两个三角形.md)
 - [来一打三角形](03/来一打三角形.md)
 - [来点皮肤](04/来点皮肤.md)
+
+### 番外篇
+- [乖乖排好](sp1/乖乖排好.md)
