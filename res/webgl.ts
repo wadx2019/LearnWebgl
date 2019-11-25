@@ -67,5 +67,20 @@ export default class Webgl{
     public draw_element_triangles(size:GLint,offset: GLintptr = 0){
         this.gl.drawElements(this.gl.TRIANGLES, size, this.gl.UNSIGNED_SHORT,offset);
     }
+
+    public draw_array_triangles(size:GLint,offset: GLintptr = 0){
+        this.gl.drawArrays(this.gl.TRIANGLE_FAN, offset,size);
+    }
+
+    public bind_texture(){
+        this.gl.texParameteri(this.gl.TEXTURE_2D,this.gl.TEXTURE_WRAP_S,this.gl.MIRRORED_REPEAT);
+        this.gl.texParameteri(this.gl.TEXTURE_2D,this.gl.TEXTURE_WRAP_T,this.gl.MIRRORED_REPEAT);
+    }
+    public set_uniform_location(location:WebGLUniformLocation,mata:Float32List){
+        this.gl.uniformMatrix4fv(location, false, mata);
+    }
+    public get_uniform_location(name:string){
+        return this.gl.getUniformLocation(this.program, name);
+    }
 }
 

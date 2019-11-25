@@ -213,17 +213,32 @@ function () {
     this.gl.drawElements(this.gl.TRIANGLES, size, this.gl.UNSIGNED_SHORT, offset);
   };
 
+  Webgl.prototype.draw_array_triangles = function (size, offset) {
+    if (offset === void 0) {
+      offset = 0;
+    }
+
+    this.gl.drawArrays(this.gl.TRIANGLE_FAN, offset, size);
+  };
+
   Webgl.prototype.bind_texture = function () {
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.MIRRORED_REPEAT);
     this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.MIRRORED_REPEAT);
-    this.gl.texP;
+  };
+
+  Webgl.prototype.set_uniform_location = function (location, mata) {
+    this.gl.uniformMatrix4fv(location, false, mata);
+  };
+
+  Webgl.prototype.get_uniform_location = function (name) {
+    return this.gl.getUniformLocation(this.program, name);
   };
 
   return Webgl;
 }();
 
 exports.default = Webgl;
-},{}],"sp1.js":[function(require,module,exports) {
+},{}],"06.js":[function(require,module,exports) {
 "use strict";
 
 var _ = _interopRequireDefault(require("../res/01.vert"));
@@ -235,19 +250,14 @@ var _webgl = _interopRequireDefault(require("../res/webgl"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var gl = new _webgl.default('canvas');
-gl.bind_shader(_.default, _2.default); //复制顶点数组到缓冲中供WebGL使用
+gl.bind_shader(_.default, _2.default); ///////////////////////////////////////////////////////////////////////////////////////
 
-var vertices = new Float32Array([-0.1, 0.1, 0, 1, 0.1, 0.1, 0, 1, 0.1, -0.1, 0, 1, -0.1, -0.1, 0, 1, 0.1, -0.3, 0, 1, 0.3, -0.3, 0, 1]);
-gl.bind_array_buffer(vertices); //设置绘制顶点的顺序
+var vertices = new Float32Array([0.1, 0.1, 0.1, 1, -0.1, 0.1, 0.1, 1, -0.1, -0.1, 0.1, 1, 0.1, -0.1, 0.1, 1, 0.1, -0.1, -0.1, 1, -0.1, -0.1, -0.1, 1, -0.1, 0.1, -0.1, 1, 0.1, 0.1, -0.1, 1]);
+gl.bind_array_buffer(vertices);
+gl.set_attr('a_Position', 4); ///////////////////////////////////////////////////////////////////////////////////////
 
-var indices = new Uint16Array([0, 1, 3, 1, 5, 4]);
-gl.bind_element_array_buffer(indices); //设置顶点属性指针
-
-gl.set_attr('a_Position', 4); //清屏幕
-
-gl.clear(); //画对象
-
-gl.draw_element_triangles(6);
+gl.clear();
+gl.draw_array_triangles(8);
 },{"../res/01.vert":"../res/01.vert","../res/01.frag":"../res/01.frag","../res/webgl":"../res/webgl.ts"}],"../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -276,7 +286,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43665" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "46595" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -452,5 +462,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","sp1.js"], null)
-//# sourceMappingURL=/sp1.js.map
+},{}]},{},["../../../../../../usr/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","06.js"], null)
+//# sourceMappingURL=/06.js.map
